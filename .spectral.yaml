@@ -1,1 +1,8 @@
 extends: [spectral:oas, "./style-guides/json-api.style.yaml", "@stoplight/spectral-owasp-ruleset"]
+
+overrides:
+  - files:
+      - "api-definitions/product-catalog.oas.yaml#/paths/~1v1~1catalog~1categories/get/responses"
+      - "api-definitions/product-catalog.oas.yaml#/paths/~1v1~1catalog~1products/get/responses"
+    rules:
+      owasp:api3:2019-define-error-validation: "off"
