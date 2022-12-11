@@ -405,9 +405,11 @@ components:
         id:
           type: string
           format: uuid
+          maxLength: 36
           description: Identifier for a product review.
         type:
           type: string
+          format: any
           maxLength: 6
           example: review
         attributes:
@@ -423,6 +425,7 @@ components:
               maxLength: 500
               minLength: 0
               type: string
+              format: any
               description: Review content.
               example: >-
                 This dog toy is great! My dog loved to play with it. I
@@ -438,12 +441,14 @@ components:
               example: 5
             authorName:
               type: string
+              format: any
               description: Name of the author of the review.
               maxLength: 30
               example: Jill Baker
             submittedDate:
               type: string
               format: date-time
+              maxLength: 24
               description: Date the review was submitted.
               example: '2022-04-12T23:20:50.52Z'
         relationships:
@@ -844,18 +849,30 @@ components:
           description: The quota units associated to the client in the current time-window.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Remaining:
           description: Remaining quota units associated to the client.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Reset:
           description: Number of seconds until the quota resets.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 3600
         Retry-After:
           description: If request limit exceeded, retry after this time window.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 120
       content:
         application/vnd.api+json:
           schema:
@@ -887,14 +904,23 @@ components:
           description: The quota units associated to the client in the current time-window.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Remaining:
           description: Remaining quota units associated to the client.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Reset:
           description: Number of seconds until the quota resets.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 3600
       content:
         application/vnd.api+json:
           schema:
