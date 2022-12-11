@@ -178,14 +178,23 @@ components:
       description: The quota units associated to the client in the current time-window.
       schema:
         type: integer
+        format: int32
+        minimum: 0
+        maximum: 64000
     rateLimitRemaining:
       description: Remaining quota units associated to the client.
       schema:
         type: integer
+        format: int32
+        minimum: 0
+        maximum: 64000
     rateLimitReset:
       description: Number of seconds until the quota resets.
       schema:
         type: integer
+        format: int32
+        minimum: 0
+        maximum: 3600
   parameters:
     productId:
       name: id
@@ -196,6 +205,8 @@ components:
       schema:
         type: string
         format: uuid
+        maxLength: 36
+        example: 1e32231d-b8a1-4145-b539-820301c2af64
     filter[category]:
       name: filter[category]
       required: false
@@ -204,7 +215,7 @@ components:
       schema:
         type: string
         format: uuid
-        maxLength: 40
+        maxLength: 36
         example: 1e32231d-b8a1-4145-b539-820301c2af64
     include:
       name: include
@@ -213,6 +224,7 @@ components:
       required: false
       schema:
         type: string
+        format: any
         maxLength: 30
         example: category
   schemas:
@@ -228,10 +240,12 @@ components:
         id:
           type: string
           format: uuid
-          description: Identifier of the category.
+          maxLength: 36
+          description: Identifier of the section.
           example: 1e32231d-b8a1-4145-b539-820301c2af64
         type:
           type: string
+          format: any
           maxLength: 8
           example: category
         attributes:
@@ -242,7 +256,8 @@ components:
               maxLength: 20
               minLength: 0
               type: string
-              description: Name of the product category.
+              format: any
+              description: Name of the product section.
               example: Dogs
         relationships:
           type: object
@@ -258,6 +273,7 @@ components:
                   properties:
                     related:
                       type: string
+                      format: any
                       maxLength: 150
                       example: >-
                         https://api.acme-pet-supplies.com/v1/catalog/products?fields[catgory]=1e32231d-b8a1-4145-b539-820301c2af64
@@ -274,10 +290,13 @@ components:
       properties:
         id:
           type: string
+          format: uuid
+          maxLength: 36
           description: Identifier for the product.
           example: dcd53ddb-8104-4e48-8cc0-5df1088c6113
         type:
           type: string
+          format: any
           maxLength: 7
           example: product
         attributes:
@@ -288,12 +307,14 @@ components:
               maxLength: 50
               minLength: 1
               type: string
+              format: any
               description: Name of the product.
               example: Acme Uber Dog Rope Toy
             description:
               maxLength: 300
               minLength: 0
               type: string
+              format: any
               description: A description of the product.
               example: >-
                 Acme Uber Dog Rope Toy provides hours of fun for your dog. Great
@@ -311,6 +332,8 @@ components:
               type: array
               items:
                 type: string
+                format: any
+                maxLength: 32
               description: >-
                 A colleciton of words that describe the product, used for
                 searching for it.
@@ -325,6 +348,8 @@ components:
               type: integer
               description: Number of product reviews.
               format: int32
+              minimum: 0
+              maximum: 128
               example: 10
         relationships:
           type: object
@@ -337,15 +362,18 @@ components:
               properties:
                 data:
                   type: array
+                  maxItems: 20
                   items:
                     type: object
                     properties:
                       id:
                         type: string
                         format: uuid
+                        maxLength: 36
                         example: 1e32231d-b8a1-4145-b539-820301c2af64
                       type:
                         type: string
+                        format: any
                         maxLength: 8
                         example: category
             has_reviews:
@@ -358,6 +386,7 @@ components:
                   properties:
                     related:
                       type: string
+                      format: any
                       maxLength: 100
                       example: >-
                         https://api.acme-pet-supplies.com/v1/catalog/products/dcd53ddb-8104-4e48-8cc0-5df1088c6113/reviews
@@ -464,6 +493,7 @@ components:
         last:
           type: string
           format: uri
+          maxLength: 100
           description: Relative uri cursor to the last page.
       description: An object containing pagination   information
     CategoriesResponse:
@@ -507,6 +537,7 @@ components:
         included:
           type: array
           uniqueItems: true
+          maxItems: 20
           items:
             $ref: '#/components/schemas/Category'
         links:
@@ -560,6 +591,7 @@ components:
       properties:
         href:
           type: string
+          format: any
           example: https://example.com/
           maxLength: 200
         meta:
@@ -578,6 +610,7 @@ components:
           description: An array of Error objects
           type: array
           minItems: 1
+          maxItems: 20
           items:
             description: A JSON:API-compliant error object.
             type: object
@@ -592,6 +625,7 @@ components:
                   problem
                 type: string
                 format: uuid
+                maxLength: 36
               links:
                 description: >-
                   a link to further details about this particular occurrence of
@@ -603,9 +637,13 @@ components:
               status:
                 description: the HTTP status code applicable to this problem
                 type: integer
+                format: int32
+                minimum: 0
+                maximum: 999
               code:
                 description: an application-specific error code
                 type: string
+                format: any
                 maxLength: 10
               title:
                 description: >-
@@ -613,12 +651,14 @@ components:
                   change from occurrence to occurrence of the problem, except
                   for purposes of localization
                 type: string
+                format: any
                 maxLength: 100
               detail:
                 description: >-
                   a human-readable explanation specific to this occurrence of
                   the problem. Like title, this field’s value can be localized
                 type: string
+                format: any
                 maxLength: 150
               source:
                 description: contains references to the source of the error
@@ -629,10 +669,12 @@ components:
                       a JSON Pointer [RFC6901] to the associated entity in the
                       request document
                     type: string
+                    format: any
                     maxLength: 500
                   parameter:
                     description: indicates which URI query parameter caused the error
                     type: string
+                    format: any
                     maxLength: 50
               meta:
                 description: >-
@@ -660,14 +702,23 @@ components:
           description: The quota units associated to the client in the current time-window.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Remaining:
           description: Remaining quota units associated to the client.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Reset:
           description: Number of seconds until the quota resets.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 3600
       content:
         application/vnd.api+json:
           schema:
@@ -685,14 +736,23 @@ components:
           description: The quota units associated to the client in the current time-window.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Remaining:
           description: Remaining quota units associated to the client.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Reset:
           description: Number of seconds until the quota resets.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 3600
       content:
         application/vnd.api+json:
           schema:
@@ -712,14 +772,23 @@ components:
           description: The quota units associated to the client in the current time-window.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Remaining:
           description: Remaining quota units associated to the client.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Reset:
           description: Number of seconds until the quota resets.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 3600
       content:
         application/vnd.api+json:
           schema:
@@ -739,14 +808,23 @@ components:
           description: The quota units associated to the client in the current time-window.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Remaining:
           description: Remaining quota units associated to the client.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Reset:
           description: Number of seconds until the quota resets.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 3600
       content:
         application/vnd.api+json:
           schema:
@@ -834,14 +912,23 @@ components:
           description: The quota units associated to the client in the current time-window.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Remaining:
           description: Remaining quota units associated to the client.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 64000
         RateLimit-Reset:
           description: Number of seconds until the quota resets.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 3600
       content:
         application/vnd.api+json:
           schema:
